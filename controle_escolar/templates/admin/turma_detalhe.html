@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ turma.nome }}{% endblock %}
+{% block content %}
+<h1>{{ turma.nome }} - {{ turma.ano_letivo }}</h1>
+<p><a href="{{ url_for('admin.turma_editar', turma_id=turma.id) }}">Editar dados da turma</a></p>
+
+<h2>Disciplinas e professores</h2>
+<table class="tabela">
+    <thead>
+        <tr><th>Disciplina</th><th>Professor responsável</th><th>Ações</th></tr>
+    </thead>
+    <tbody>
+        {% for td in turma.turmas_disciplinas %}
+        <tr>
+            <td>{{ td.disciplina.nome }}</td>
+            <td>{{ td.professor.nome }}</td>
+            <td>
+                <form method="post" action="{{ url_for('admin.turma_remover_disciplina', turma_id=turma.id, td_id=td.id) }}"
+                      style="display:inline" onsubmit="return confirm('Remover esta disciplina da turma?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Remover</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Nenhuma disciplina atribuída ainda.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Atribuir nova disciplina</h3>
+{% if form.disciplina_id.choices %}
+<form method="post" action="{{ url_for('admin.turma_atribuir_disciplina', turma_id=turma.id) }}" class="form-padrao">
+    {{ form.hidden_tag() }}
+    <div class="campo">
+        {{ form.disciplina_id.label }}
+        {{ form.disciplina_id() }}
+    </div>
+    <div class="campo">
+        {{ form.professor_id.label }}
+        {{ form.professor_id() }}
+    </div>
+    {{ form.submit() }}
+</form>
+{% else %}
+<p>Todas as disciplinas cadastradas já estão atribuídas a essa turma.</p>
+{% endif %}
+
+<h2>Alunos</h2>
+<p>
+    <a href="{{ url_for('admin.aluno_novo', turma_id=turma.id) }}">+ Novo aluno</a> ·
+    <a href="{{ url_for('admin.alunos_importar', turma_id=turma.id) }}">Importar planilha</a>
+</p>
+<table class="tabela">
+    <thead><tr><th>Nome</th><th>Matrícula</th><th>Responsável</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for aluno in turma.alunos %}
+        <tr>
+            <td>{{ aluno.nome }}</td>
+            <td>{{ aluno.matricula }}</td>
+            <td>{{ aluno.nome_responsavel or "-" }}</td>
+            <td>
+                <a href="{{ url_for('boletim.boletim_aluno', aluno_id=aluno.id) }}" target="_blank">Boletim (PDF)</a>
+                <a href="{{ url_for('admin.aluno_editar', aluno_id=aluno.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('admin.aluno_excluir', aluno_id=aluno.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir este aluno?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Nenhum aluno cadastrado nessa turma.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><a href="{{ url_for('admin.turmas_lista') }}">&larr; Voltar para a lista de turmas</a></p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Professores{% endblock %}
+{% block content %}
+<h1>Professores</h1>
+<p><a href="{{ url_for('admin.professor_novo') }}">+ Novo professor</a></p>
+
+<table class="tabela">
+    <thead><tr><th>Nome</th><th>Login</th><th>E-mail</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for professor in professores %}
+        <tr>
+            <td>{{ professor.nome }}</td>
+            <td>{{ professor.usuario.login if professor.usuario else "-" }}</td>
+            <td>{{ professor.email or "-" }}</td>
+            <td>
+                <a href="{{ url_for('admin.professor_editar', professor_id=professor.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('admin.professor_excluir', professor_id=professor.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir este professor?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Nenhum professor cadastrado.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

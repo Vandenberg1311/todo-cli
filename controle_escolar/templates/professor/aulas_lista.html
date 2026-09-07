@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Aulas - {{ td.disciplina.nome }}{% endblock %}
+{% block content %}
+<h1>Aulas - {{ td.disciplina.nome }} - {{ td.turma.nome }} ({{ td.turma.ano_letivo }})</h1>
+<p>
+    <a href="{{ url_for('professor.turma_disciplina_detalhe', td_id=td.id, bimestre=bimestre) }}">&larr; Voltar para notas</a> ·
+    <a href="{{ url_for('professor.medias_finais', td_id=td.id) }}">Ver médias e frequência final</a>
+</p>
+
+<nav class="bimestres">
+    Bimestre:
+    {% for n in bimestres %}
+        {% if n == bimestre %}
+            <strong>{{ n }}º</strong>
+        {% else %}
+            <a href="{{ url_for('professor.aulas_lista', td_id=td.id, bimestre=n) }}">{{ n }}º</a>
+        {% endif %}
+    {% endfor %}
+</nav>
+
+<h2>Aulas do {{ bimestre }}º bimestre</h2>
+<table class="tabela">
+    <thead><tr><th>Data</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for aula in aulas %}
+        <tr>
+            <td>{{ aula.data.strftime("%d/%m/%Y") }}</td>
+            <td>
+                <a href="{{ url_for('professor.aula_presenca', aula_id=aula.id) }}">Marcar presença</a>
+                <form method="post" action="{{ url_for('professor.aula_excluir', aula_id=aula.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir esta aula e as presenças marcadas?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">Nenhuma aula lançada para este bimestre ainda.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Nova aula</h3>
+<form method="post" class="form-padrao form-inline">
+    {{ form.hidden_tag() }}
+    <span class="campo">{{ form.data.label }} {{ form.data() }}</span>
+    {{ form.submit() }}
+</form>
+{% endblock %}

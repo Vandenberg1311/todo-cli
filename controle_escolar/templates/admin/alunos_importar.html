@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Importar alunos{% endblock %}
+{% block content %}
+<h1>Importar alunos para {{ turma.nome }} ({{ turma.ano_letivo }})</h1>
+
+<p>Envie um arquivo <strong>.xlsx</strong> ou <strong>.csv</strong> com a primeira linha de cabeçalho contendo as colunas:</p>
+<ul>
+    <li><code>nome</code> (obrigatório)</li>
+    <li><code>matricula</code> (obrigatório)</li>
+    <li><code>data_nascimento</code> (opcional, formato AAAA-MM-DD ou DD/MM/AAAA)</li>
+    <li><code>nome_responsavel</code> (opcional)</li>
+    <li><code>contato_responsavel</code> (opcional)</li>
+</ul>
+<p>Todos os alunos da planilha serão vinculados a esta turma. Linhas com matrícula já cadastrada no sistema são ignoradas.</p>
+
+<form method="post" enctype="multipart/form-data" novalidate class="form-padrao">
+    {{ form.hidden_tag() }}
+    <div class="campo">
+        {{ form.arquivo.label }}
+        {{ form.arquivo() }}
+        {% for erro in form.arquivo.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    {{ form.submit() }}
+</form>
+<p><a href="{{ url_for('admin.turma_detalhe', turma_id=turma.id) }}">&larr; Voltar para a turma</a></p>
+{% endblock %}

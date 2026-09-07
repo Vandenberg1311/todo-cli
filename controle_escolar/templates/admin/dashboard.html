@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Painel do Administrador{% endblock %}
+{% block content %}
+<h1>Painel do Administrador</h1>
+<p>Bem-vindo(a), {{ current_user.nome }}.</p>
+<ul>
+    <li><a href="{{ url_for('admin.turmas_lista') }}">Turmas</a></li>
+    <li><a href="{{ url_for('admin.disciplinas_lista') }}">Disciplinas</a></li>
+    <li><a href="{{ url_for('admin.professores_lista') }}">Professores</a></li>
+    <li><a href="{{ url_for('admin.alunos_lista') }}">Alunos</a></li>
+</ul>
+{% endblock %}

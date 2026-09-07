@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Parâmetros de aprovação{% endblock %}
+{% block content %}
+<h1>Parâmetros de aprovação</h1>
+<p>Definem a média mínima e a frequência mínima usadas para calcular a situação final do aluno no boletim, por ano letivo.</p>
+
+<table class="tabela">
+    <thead><tr><th>Ano letivo</th><th>Média mínima</th><th>Frequência mínima</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for ano, parametro in linhas %}
+        <tr>
+            <td>{{ ano }}</td>
+            <td>{{ parametro.media_minima if parametro else "não configurado" }}</td>
+            <td>{{ parametro.frequencia_minima_percentual ~ "%" if parametro else "não configurado" }}</td>
+            <td><a href="{{ url_for('admin.parametro_editar', ano_letivo=ano) }}">{{ "Editar" if parametro else "Configurar" }}</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Nenhum ano letivo cadastrado ainda (crie uma turma primeiro).</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

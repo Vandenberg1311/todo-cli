@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Alunos{% endblock %}
+{% block content %}
+<h1>Alunos</h1>
+<p>Para cadastrar um aluno (manualmente ou por planilha), acesse a turma desejada.</p>
+
+<table class="tabela">
+    <thead><tr><th>Nome</th><th>Matrícula</th><th>Turma</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for aluno in alunos %}
+        <tr>
+            <td>{{ aluno.nome }}</td>
+            <td>{{ aluno.matricula }}</td>
+            <td><a href="{{ url_for('admin.turma_detalhe', turma_id=aluno.turma_id) }}">{{ aluno.turma.nome }} ({{ aluno.turma.ano_letivo }})</a></td>
+            <td>
+                <a href="{{ url_for('boletim.boletim_aluno', aluno_id=aluno.id) }}" target="_blank">Boletim (PDF)</a>
+                <a href="{{ url_for('admin.aluno_editar', aluno_id=aluno.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('admin.aluno_excluir', aluno_id=aluno.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir este aluno?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Nenhum aluno cadastrado.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

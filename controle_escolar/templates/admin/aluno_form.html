@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block content %}
+<h1>{{ titulo }}</h1>
+<form method="post" novalidate class="form-padrao">
+    {{ form.hidden_tag() }}
+    <div class="campo">
+        {{ form.nome.label }}
+        {{ form.nome(size=40) }}
+        {% for erro in form.nome.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    <div class="campo">
+        {{ form.matricula.label }}
+        {{ form.matricula(size=20) }}
+        {% for erro in form.matricula.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    <div class="campo">
+        {{ form.data_nascimento.label }}
+        {{ form.data_nascimento() }}
+        {% for erro in form.data_nascimento.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    <div class="campo">
+        {{ form.nome_responsavel.label }}
+        {{ form.nome_responsavel(size=40) }}
+    </div>
+    <div class="campo">
+        {{ form.contato_responsavel.label }}
+        {{ form.contato_responsavel(size=30) }}
+    </div>
+    <div class="campo">
+        {{ form.turma_id.label }}
+        {{ form.turma_id() }}
+        {% for erro in form.turma_id.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    {{ form.submit() }}
+</form>
+<p><a href="{{ url_for('admin.alunos_lista') }}">&larr; Voltar para a lista de alunos</a></p>
+{% endblock %}

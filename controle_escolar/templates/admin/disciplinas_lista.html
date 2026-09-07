@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Disciplinas{% endblock %}
+{% block content %}
+<h1>Disciplinas</h1>
+<p><a href="{{ url_for('admin.disciplina_nova') }}">+ Nova disciplina</a></p>
+
+<table class="tabela">
+    <thead><tr><th>Nome</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for disciplina in disciplinas %}
+        <tr>
+            <td>{{ disciplina.nome }}</td>
+            <td>
+                <a href="{{ url_for('admin.disciplina_editar', disciplina_id=disciplina.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('admin.disciplina_excluir', disciplina_id=disciplina.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir esta disciplina?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">Nenhuma disciplina cadastrada.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

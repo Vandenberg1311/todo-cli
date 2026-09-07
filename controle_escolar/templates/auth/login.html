@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Login - Controle Escolar{% endblock %}
+{% block content %}
+<h1>Entrar</h1>
+<form method="post" novalidate class="form-login">
+    {{ form.hidden_tag() }}
+    <div class="campo">
+        {{ form.login.label }}
+        {{ form.login(size=30) }}
+        {% for erro in form.login.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    <div class="campo">
+        {{ form.senha.label }}
+        {{ form.senha(size=30) }}
+        {% for erro in form.senha.errors %}<span class="erro">{{ erro }}</span>{% endfor %}
+    </div>
+    <div class="campo campo-checkbox">
+        {{ form.lembrar() }} {{ form.lembrar.label }}
+    </div>
+    {{ form.submit() }}
+</form>
+{% endblock %}

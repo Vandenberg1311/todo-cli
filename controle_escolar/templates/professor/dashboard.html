@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Painel do Professor{% endblock %}
+{% block content %}
+<h1>Painel do Professor</h1>
+<p>Bem-vindo(a), {{ current_user.nome }}.</p>
+
+<table class="tabela">
+    <thead><tr><th>Turma</th><th>Disciplina</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for td in atribuicoes %}
+        <tr>
+            <td>{{ td.turma.nome }} ({{ td.turma.ano_letivo }})</td>
+            <td>{{ td.disciplina.nome }}</td>
+            <td><a href="{{ url_for('professor.turma_disciplina_detalhe', td_id=td.id) }}">Lançar notas</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Nenhuma turma/disciplina atribuída a você ainda.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ td.disciplina.nome }} - {{ td.turma.nome }}{% endblock %}
+{% block content %}
+<h1>{{ td.disciplina.nome }} - {{ td.turma.nome }} ({{ td.turma.ano_letivo }})</h1>
+<p>
+    <a href="{{ url_for('professor.dashboard') }}">&larr; Voltar</a> ·
+    <a href="{{ url_for('professor.aulas_lista', td_id=td.id, bimestre=bimestre) }}">Aulas e presença</a> ·
+    <a href="{{ url_for('professor.medias_finais', td_id=td.id) }}">Ver médias e frequência final</a>
+</p>
+
+<nav class="bimestres">
+    Bimestre:
+    {% for n in bimestres %}
+        {% if n == bimestre %}
+            <strong>{{ n }}º</strong>
+        {% else %}
+            <a href="{{ url_for('professor.turma_disciplina_detalhe', td_id=td.id, bimestre=n) }}">{{ n }}º</a>
+        {% endif %}
+    {% endfor %}
+</nav>
+
+<h2>Avaliações do {{ bimestre }}º bimestre</h2>
+<table class="tabela">
+    <thead><tr><th>Nome</th><th>Peso</th><th>Ações</th></tr></thead>
+    <tbody>
+        {% for av in avaliacoes %}
+        <tr>
+            <td>{{ av.nome }}</td>
+            <td>{{ av.peso }}</td>
+            <td>
+                <a href="{{ url_for('professor.avaliacao_editar', avaliacao_id=av.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('professor.avaliacao_excluir', avaliacao_id=av.id) }}"
+                      style="display:inline" onsubmit="return confirm('Excluir esta avaliação?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Nenhuma avaliação criada para este bimestre ainda.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Nova avaliação</h3>
+<form method="post" action="{{ url_for('professor.avaliacao_nova', td_id=td.id, bimestre=bimestre) }}" class="form-padrao form-inline">
+    {{ form.hidden_tag() }}
+    <span class="campo">{{ form.nome.label }} {{ form.nome(size=25) }}</span>
+    <span class="campo">{{ form.peso.label }} {{ form.peso(size=6) }}</span>
+    {{ form.submit() }}
+</form>
+
+{% if avaliacoes and alunos %}
+<h2>Lançamento de notas</h2>
+<form method="post" action="{{ url_for('professor.notas_salvar', td_id=td.id, bimestre=bimestre) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <table class="tabela">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                {% for av in avaliacoes %}<th>{{ av.nome }} (peso {{ av.peso }})</th>{% endfor %}
+                <th>Média do bimestre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.nome }}</td>
+                {% for av in avaliacoes %}
+                <td><input type="text" inputmode="decimal" size="4"
+                           name="nota_{{ aluno.id }}_{{ av.id }}"
+                           value="{{ notas.get((aluno.id, av.id), '') }}"></td>
+                {% endfor %}
+                <td>{{ "%.2f"|format(medias_bimestre[aluno.id]) if medias_bimestre[aluno.id] is not none else "-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Salvar notas</button>
+</form>
+{% elif not alunos %}
+<p>Essa turma ainda não tem alunos cadastrados.</p>
+{% else %}
+<p>Crie ao menos uma avaliação para lançar notas.</p>
+{% endif %}
+{% endblock %}

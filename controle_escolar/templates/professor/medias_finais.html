@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Médias finais{% endblock %}
+{% block content %}
+<h1>Médias finais - {{ td.disciplina.nome }} - {{ td.turma.nome }} ({{ td.turma.ano_letivo }})</h1>
+
+<table class="tabela">
+    <thead>
+        <tr>
+            <th>Aluno</th>
+            <th>1º Bim</th><th>2º Bim</th><th>3º Bim</th><th>4º Bim</th>
+            <th>Média final</th>
+            <th>Frequência</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for linha in linhas %}
+        <tr>
+            <td>{{ linha.aluno.nome }}</td>
+            {% for m in linha.medias_bim %}
+            <td>{{ "%.2f"|format(m) if m is not none else "-" }}</td>
+            {% endfor %}
+            <td>
+                {% if linha.final is not none %}
+                    {{ "%.2f"|format(linha.final) }}{% if not linha.completo %} (parcial){% endif %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if linha.frequencia %}
+                    {{ "%.1f"|format(linha.frequencia.percentual) }}% ({{ linha.frequencia.presentes }}/{{ linha.frequencia.total }})
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">Nenhum aluno nessa turma.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><a href="{{ url_for('professor.turma_disciplina_detalhe', td_id=td.id) }}">&larr; Voltar</a></p>
+{% endblock %}

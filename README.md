@@ -1,3 +1,12 @@
+# Projetos
+
+Este repositório contém dois projetos independentes:
+
+- **todo-cli** (raiz deste repositório): CLI simples de lista de tarefas, descrita abaixo.
+- **[controle_escolar](controle_escolar/README.md)**: sistema web em Flask para controle escolar (turmas, disciplinas, professores, alunos, notas por bimestre, presença e boletim em PDF). Veja as instruções de instalação e uso no [README do projeto](controle_escolar/README.md).
+
+---
+
 # todo-cli
 
 CLI simples em Python para gerenciar uma lista de tarefas, armazenada em `tarefas.json`.

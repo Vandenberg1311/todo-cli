@@ -1,0 +1,118 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #f4f5f7;
+    color: #222;
+}
+
+.topbar {
+    background: #1f2d3d;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.topbar .marca {
+    font-weight: bold;
+    margin-right: auto;
+    color: #fff;
+    text-decoration: none;
+}
+
+.topbar a {
+    color: #fff;
+}
+
+.nav-admin {
+    display: flex;
+    gap: 1rem;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    background: #fff;
+}
+
+.tabela th, .tabela td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-padrao .campo {
+    margin-bottom: 1rem;
+}
+
+.form-padrao label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.form-inline {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-inline .campo {
+    margin-bottom: 0;
+}
+
+.bimestres {
+    margin-bottom: 1rem;
+}
+
+.bimestres a, .bimestres strong {
+    margin-right: 0.5rem;
+}
+
+.conteudo {
+    padding: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-login .campo {
+    margin-bottom: 1rem;
+}
+
+.form-login label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.form-login .campo-checkbox label {
+    display: inline;
+}
+
+.erro {
+    color: #b00020;
+    display: block;
+    font-size: 0.85rem;
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+}
+
+.flash {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.flash-error {
+    background: #fdecea;
+    color: #b00020;
+}
+
+.flash-info {
+    background: #e8f0fe;
+    color: #1a3e8c;
+}

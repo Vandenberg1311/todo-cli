@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Controle Escolar{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="marca" href="{{ url_for('index') }}">Controle Escolar</a>
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+            <nav class="nav-admin">
+                <a href="{{ url_for('admin.turmas_lista') }}">Turmas</a>
+                <a href="{{ url_for('admin.disciplinas_lista') }}">Disciplinas</a>
+                <a href="{{ url_for('admin.professores_lista') }}">Professores</a>
+                <a href="{{ url_for('admin.alunos_lista') }}">Alunos</a>
+                <a href="{{ url_for('admin.parametros_lista') }}">Parâmetros</a>
+            </nav>
+        {% endif %}
+        {% if current_user.is_authenticated %}
+            <span class="usuario-info">{{ current_user.nome }} ({{ current_user.papel }})</span>
+            <a href="{{ url_for('auth.logout') }}">Sair</a>
+        {% endif %}
+    </header>
+
+    <main class="conteudo">
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                <ul class="flashes">
+                    {% for categoria, mensagem in mensagens %}
+                        <li class="flash flash-{{ categoria }}">{{ mensagem }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

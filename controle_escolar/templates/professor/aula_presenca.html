@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Presença - {{ aula.data.strftime("%d/%m/%Y") }}{% endblock %}
+{% block content %}
+<h1>Presença - {{ aula.turma_disciplina.disciplina.nome }} - {{ aula.data.strftime("%d/%m/%Y") }}</h1>
+
+<form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <table class="tabela">
+        <thead><tr><th>Aluno</th><th>Presente</th></tr></thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.nome }}</td>
+                <td>
+                    <input type="checkbox" name="presente_{{ aluno.id }}"
+                           {% if presencas.get(aluno.id, True) %}checked{% endif %}>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="2">Essa turma não tem alunos cadastrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Salvar presença</button>
+</form>
+
+<p>
+    <a href="{{ url_for('professor.aulas_lista', td_id=aula.turma_disciplina_id, bimestre=aula.bimestre_numero) }}">
+        &larr; Voltar para a lista de aulas
+    </a>
+</p>
+{% endblock %}
